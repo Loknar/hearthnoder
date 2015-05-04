@@ -1,0 +1,37 @@
+syntax = "proto2";
+package SpectatorProto;
+import "PegasusShared.proto";
+
+
+enum Constants {
+	DEFAULT_PORT = 3724;
+}
+
+message JoinInfo {
+	optional string server_ip_address = 1;
+	optional uint32 server_port = 2;
+	optional int32 game_handle = 3;
+	optional string secret_key = 4;
+	optional bool is_joinable = 5;
+	optional int32 current_num_spectators = 6;
+	optional int32 max_num_spectators = 7;
+	optional .PegasusShared.GameType game_type = 8;
+	optional int32 mission_id = 9;
+	repeated .PegasusShared.BnetId spectated_players = 10;
+	optional .PegasusShared.BnetId party_id = 11;
+}
+
+message Invite {
+	optional .PegasusShared.BnetId inviterGameAccountId = 1;
+	optional .SpectatorProto.JoinInfo join_info = 2;
+}
+
+message PartyServerInfo {
+	optional string server_ip_address = 1;
+	optional uint32 server_port = 2;
+	optional int32 game_handle = 3;
+	optional string secret_key = 4;
+	optional .PegasusShared.GameType game_type = 5;
+	optional int32 mission_id = 6;
+}
+

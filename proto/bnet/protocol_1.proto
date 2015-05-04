@@ -1,0 +1,55 @@
+syntax = "proto2";
+package bnet.protocol;
+import "bnet/protocol_0.proto";
+import "bnet/protocol/attribute.proto";
+
+
+message ObjectAddress {
+	optional .bnet.protocol.ProcessId host = 1;
+	optional uint64 object_id = 2;
+}
+
+message ErrorInfo {
+	optional .bnet.protocol.ObjectAddress object_address = 1;
+	optional uint32 status = 2;
+	optional uint32 service_hash = 3;
+	optional uint32 method_id = 4;
+}
+
+message Header {
+	optional uint32 service_id = 1;
+	optional uint32 method_id = 2;
+	optional uint32 token = 3;
+	optional uint64 object_id = 4;
+	optional uint32 size = 5;
+	optional uint32 status = 6;
+	repeated .bnet.protocol.ErrorInfo error = 7;
+	optional uint64 timeout = 8;
+}
+
+message Role {
+	optional uint32 id = 1;
+	optional string name = 2;
+	repeated string privilege = 3;
+	repeated uint32 assignable_role = 4;
+	optional bool required = 5;
+	optional bool unique = 6;
+	optional uint32 relegation_role = 7;
+	repeated .bnet.protocol.attribute.Attribute attribute = 8;
+}
+
+message RoleSet {
+	optional string program = 1;
+	optional string service = 2;
+	optional string subtype = 3 [default = "default"];
+	repeated .bnet.protocol.Role role = 4;
+	repeated uint32 default_role = 5;
+	optional int32 max_members = 6;
+	repeated .bnet.protocol.attribute.Attribute attribute = 7;
+}
+
+message RoleSetConfig {
+	repeated .bnet.protocol.Privilege privilege = 1;
+	optional .bnet.protocol.RoleSet role_set = 2;
+}
+

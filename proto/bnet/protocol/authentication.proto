@@ -1,0 +1,114 @@
+syntax = "proto2";
+package bnet.protocol.authentication;
+import "bnet/protocol/account_0.proto";
+import "bnet/protocol_0.proto";
+
+
+message AccountSettingsNotification {
+	repeated .bnet.protocol.account.AccountLicense licenses = 1;
+	optional bool is_using_rid = 2;
+	optional bool is_playing_from_igr = 3;
+	optional bool can_receive_voice = 4;
+	optional bool can_send_voice = 5;
+}
+
+message GenerateSSOTokenRequest {
+	optional fixed32 program = 1;
+}
+
+message GenerateSSOTokenResponse {
+	optional bytes sso_id = 1;
+	optional bytes sso_secret = 2;
+}
+
+message LogonQueueUpdateRequest {
+	optional uint32 position = 1;
+	optional uint64 estimated_time = 2;
+	optional uint64 eta_deviation_in_sec = 3;
+}
+
+message LogonRequest {
+	optional string program = 1;
+	optional string platform = 2;
+	optional string locale = 3;
+	optional string email = 4;
+	optional string version = 5;
+	optional int32 application_version = 6;
+	optional bool public_computer = 7;
+	optional bytes sso_id = 8;
+	optional bool disconnect_on_cookie_fail = 9;
+	optional bool allow_logon_queue_notifications = 10;
+	optional bool web_client_verification = 11;
+	optional bytes cached_web_credentials = 12;
+	optional string user_agent = 14;
+}
+
+message LogonUpdateRequest {
+	optional uint32 error_code = 1;
+}
+
+message MemModuleLoadResponse {
+	optional bytes data = 1;
+}
+
+message ModuleMessageRequest {
+	optional int32 module_id = 1;
+	optional bytes message = 2;
+}
+
+message ModuleNotification {
+	optional int32 module_id = 2;
+	optional uint32 result = 3;
+}
+
+message ServerStateChangeRequest {
+	optional uint32 state = 1;
+	optional uint64 event_time = 2;
+}
+
+message VerifyWebCredentialsRequest {
+	optional bytes web_credentials = 1;
+}
+
+message VersionInfo {
+	optional uint32 number = 1;
+	optional string patch = 2;
+	optional bool is_optional = 3;
+	optional uint64 kick_time = 4;
+}
+
+message VersionInfoNotification {
+	optional .bnet.protocol.authentication.VersionInfo version_info = 1;
+}
+
+message MemModuleLoadRequest {
+	optional .bnet.protocol.ContentHandle handle = 1;
+	optional bytes key = 2;
+	optional bytes input = 3;
+}
+
+message ModuleLoadRequest {
+	optional .bnet.protocol.ContentHandle module_handle = 1;
+	optional bytes message = 2;
+}
+
+message GameAccountSelectedRequest {
+	optional uint32 result = 1;
+	optional .bnet.protocol.EntityId game_account = 2;
+}
+
+message LogonResult {
+	optional uint32 error_code = 1;
+	optional .bnet.protocol.EntityId account = 2;
+	repeated .bnet.protocol.EntityId game_account = 3;
+	optional string email = 4;
+	repeated uint32 available_region = 5;
+	optional uint32 connected_region = 6;
+	optional string battle_tag = 7;
+	optional string geoip_country = 8;
+}
+
+message SelectGameAccountRequest {
+	optional .bnet.protocol.EntityId game_account = 1;
+}
+

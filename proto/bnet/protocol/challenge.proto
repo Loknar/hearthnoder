@@ -1,0 +1,79 @@
+syntax = "proto2";
+package bnet.protocol.challenge;
+import "bnet/protocol/attribute.proto";
+import "bnet/protocol_0.proto";
+
+
+message Challenge {
+	optional fixed32 type = 1;
+	optional string info = 2;
+	optional string answer = 3;
+	optional uint32 retries = 4;
+}
+
+message ChallengeAnsweredRequest {
+	optional string answer = 1;
+	optional bytes data = 2;
+	optional uint32 id = 3;
+}
+
+message ChallengeAnsweredResponse {
+	optional bytes data = 1;
+	optional bool do_retry = 2;
+	optional bool record_not_found = 3;
+}
+
+message ChallengeCancelledRequest {
+	optional uint32 id = 1;
+}
+
+message ChallengeExternalRequest {
+	optional string request_token = 1;
+	optional string payload_type = 2;
+	optional bytes payload = 3;
+}
+
+message ChallengeExternalResult {
+	optional string request_token = 1;
+	optional bool passed = 2 [default = true];
+}
+
+message ChallengePickedRequest {
+	optional fixed32 challenge = 1;
+	optional uint32 id = 2;
+	optional bool new_challenge_protocol = 3;
+}
+
+message ChallengePickedResponse {
+	optional bytes data = 1;
+}
+
+message ChallengeResultRequest {
+	optional uint32 id = 1;
+	optional fixed32 type = 2;
+	optional uint32 error_id = 3;
+	optional bytes answer = 4;
+}
+
+message SendChallengeToUserResponse {
+	optional uint32 id = 1;
+}
+
+message ChallengeUserRequest {
+	repeated .bnet.protocol.challenge.Challenge challenges = 1;
+	optional fixed32 context = 2;
+	optional uint32 id = 3;
+	optional uint64 deadline = 4;
+	repeated .bnet.protocol.attribute.Attribute attributes = 5;
+	optional .bnet.protocol.EntityId game_account_id = 6;
+}
+
+message SendChallengeToUserRequest {
+	optional .bnet.protocol.ProcessId peer_id = 1;
+	optional .bnet.protocol.EntityId game_account_id = 2;
+	repeated .bnet.protocol.challenge.Challenge challenges = 3;
+	optional fixed32 context = 4;
+	optional uint64 timeout = 5;
+	repeated .bnet.protocol.attribute.Attribute attributes = 6;
+}
+

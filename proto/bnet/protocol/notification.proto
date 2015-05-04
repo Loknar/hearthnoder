@@ -1,0 +1,33 @@
+syntax = "proto2";
+package bnet.protocol.notification;
+import "bnet/protocol_0.proto";
+import "bnet/protocol/attribute.proto";
+
+
+message FindClientRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+}
+
+message Notification {
+	optional .bnet.protocol.EntityId sender_id = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+	optional string type = 3;
+	repeated .bnet.protocol.attribute.Attribute attribute = 4;
+	optional .bnet.protocol.EntityId sender_account_id = 5;
+	optional .bnet.protocol.EntityId target_account_id = 6;
+	optional string sender_battle_tag = 7;
+}
+
+message RegisterClientRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+}
+
+message UnregisterClientRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+}
+
+message FindClientResponse {
+	optional uint32 label = 1;
+	optional .bnet.protocol.ProcessId client_process_id = 2;
+}
+

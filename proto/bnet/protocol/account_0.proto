@@ -1,0 +1,28 @@
+syntax = "proto2";
+package bnet.protocol.account;
+
+
+message AccountCredential {
+	optional uint32 id = 1;
+	optional bytes data = 2;
+}
+
+message AccountFieldOptions {
+	optional bool all_fields = 1;
+	optional bool field_account_level_info = 2;
+	optional bool field_privacy_info = 3;
+	optional bool field_parental_control_info = 4;
+	optional bool field_game_level_info = 6;
+	optional bool field_game_status = 7;
+	optional bool field_game_accounts = 8;
+}
+
+message AccountId {
+	optional fixed32 id = 1;
+}
+
+message AccountLicense {
+	optional uint32 id = 1;
+	optional uint64 expires = 2;
+}
+

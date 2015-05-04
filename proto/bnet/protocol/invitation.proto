@@ -1,0 +1,68 @@
+syntax = "proto2";
+package bnet.protocol.invitation;
+import "bnet/protocol_0.proto";
+
+
+message GenericRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+	optional fixed64 invitation_id = 3;
+	optional string invitee_name = 4;
+	optional string inviter_name = 5;
+	repeated uint32 previous_role = 6;
+	repeated uint32 desired_role = 7;
+	optional uint32 reason = 8;
+}
+
+message Invitation {
+	optional fixed64 id = 1;
+	optional .bnet.protocol.Identity inviter_identity = 2;
+	optional .bnet.protocol.Identity invitee_identity = 3;
+	optional string inviter_name = 4;
+	optional string invitee_name = 5;
+	optional string invitation_message = 6;
+	optional uint64 creation_time = 7;
+	optional uint64 expiration_time = 8;
+	extensions 100 to 10000;
+}
+
+message InvitationParams {
+	optional string invitation_message = 1;
+	optional uint64 expiration_time = 2;
+	extensions 100 to 10000;
+}
+
+message InvitationTarget {
+	optional .bnet.protocol.Identity identity = 1;
+	optional string email = 2;
+	optional string battle_tag = 3;
+	extensions 100 to 10000;
+}
+
+message SendInvitationRequest {
+	optional .bnet.protocol.Identity agent_identity = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+	optional .bnet.protocol.invitation.InvitationParams params = 3;
+	optional .bnet.protocol.AccountInfo agent_info = 4;
+	optional .bnet.protocol.invitation.InvitationTarget target = 5;
+}
+
+message SendInvitationResponse {
+	optional .bnet.protocol.invitation.Invitation invitation = 2;
+}
+
+message Suggestion {
+	optional .bnet.protocol.EntityId channel_id = 1;
+	optional .bnet.protocol.EntityId suggester_id = 2;
+	optional .bnet.protocol.EntityId suggestee_id = 3;
+	optional string suggester_name = 4;
+	optional string suggestee_name = 5;
+	optional .bnet.protocol.EntityId suggester_account_id = 6;
+}
+
+message UpdateInvitationRequest {
+	optional .bnet.protocol.Identity agent_identity = 1;
+	optional fixed64 invitation_id = 2;
+	optional .bnet.protocol.invitation.InvitationParams params = 3;
+}
+

@@ -1,0 +1,106 @@
+syntax = "proto2";
+package bnet.protocol.friends;
+import "bnet/protocol_0.proto";
+import "bnet/protocol/attribute.proto";
+import "bnet/protocol/invitation.proto";
+import "bnet/protocol_1.proto";
+
+
+message AssignRoleRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+	repeated int32 role = 3;
+}
+
+message Friend {
+	optional .bnet.protocol.EntityId id = 1;
+	repeated .bnet.protocol.attribute.Attribute attribute = 2;
+	repeated uint32 role = 3;
+	optional uint64 privileges = 4;
+	optional uint64 attributes_epoch = 5;
+	optional string full_name = 6;
+	optional string battle_tag = 7;
+}
+
+message FriendNotification {
+	optional .bnet.protocol.friends.Friend target = 1;
+	optional .bnet.protocol.EntityId game_account_id = 2;
+}
+
+message GenericFriendRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+}
+
+message GenericFriendResponse {
+	optional .bnet.protocol.friends.Friend target_friend = 1;
+}
+
+message SubscribeToFriendsRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional uint64 object_id = 2;
+}
+
+message UnsubscribeToFriendsRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional uint64 object_id = 2;
+}
+
+message UpdateFriendStateNotification {
+	optional .bnet.protocol.friends.Friend changed_friend = 1;
+	optional .bnet.protocol.EntityId game_account_id = 2;
+}
+
+message UpdateFriendStateRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+	repeated .bnet.protocol.attribute.Attribute attribute = 3;
+	optional uint64 attributes_epoch = 4;
+}
+
+message ViewFriendsRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId target_id = 2;
+	repeated uint32 role = 3;
+}
+
+message ViewFriendsResponse {
+	repeated .bnet.protocol.friends.Friend friends = 1;
+}
+
+message FriendInvitation {
+	optional bool first_received = 1;
+	repeated uint32 role = 2;
+	extend .bnet.protocol.invitation.Invitation {
+		optional bnet.protocol.friends.FriendInvitation friend_invite = 103;
+	}
+}
+
+message InvitationNotification {
+	optional .bnet.protocol.invitation.Invitation invitation = 1;
+	optional .bnet.protocol.EntityId game_account_id = 2;
+	optional uint32 reason = 3;
+}
+
+message FriendInvitationParams {
+	optional string target_email = 1;
+	optional string target_battle_tag = 2;
+	optional string inviter_battle_tag = 3;
+	optional string inviter_full_name = 4;
+	optional string invitee_display_name = 5;
+	repeated uint32 role = 6;
+	extend .bnet.protocol.invitation.InvitationParams {
+		optional bnet.protocol.friends.FriendInvitationParams friend_params = 103;
+	}
+}
+
+message SubscribeToFriendsResponse {
+	optional uint32 max_friends = 1;
+	optional uint32 max_received_invitations = 2;
+	optional uint32 max_sent_invitations = 3;
+	repeated .bnet.protocol.Role role = 4;
+	repeated .bnet.protocol.friends.Friend friends = 5;
+	repeated .bnet.protocol.invitation.Invitation sent_invitations = 6;
+	repeated .bnet.protocol.invitation.Invitation received_invitations = 7;
+}
+

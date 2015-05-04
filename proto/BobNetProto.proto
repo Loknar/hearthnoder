@@ -1,0 +1,151 @@
+syntax = "proto2";
+package BobNetProto;
+import "PegasusShared.proto";
+
+
+message AutoLogin {
+	enum PacketID {
+		ID = 103;
+	}
+	optional string user = 1;
+	optional string pwd = 2;
+	optional int32 build_id = 3;
+	optional string debug_name = 4;
+	optional int32 source = 5;
+}
+
+message Deadend {
+	enum PacketID {
+		ID = 169;
+	}
+	optional string reply1 = 1;
+	optional string reply2 = 2;
+	optional string reply3 = 3;
+}
+
+message DeadendUtil {
+	enum PacketID {
+		ID = 167;
+	}
+	optional string reply1 = 1;
+	optional string reply2 = 2;
+	optional string reply3 = 3;
+}
+
+message DebugConsoleCmdList {
+	message DebugConsoleCmd {
+		message DebugConsoleCmdParam {
+			optional string paramType = 1;
+			optional string paramName = 2;
+		}
+		optional string name = 1;
+		repeated .BobNetProto.DebugConsoleCmdList.DebugConsoleCmd.DebugConsoleCmdParam params = 2;
+	}
+	enum PacketID {
+		ID = 146;
+	}
+	repeated .BobNetProto.DebugConsoleCmdList.DebugConsoleCmd commands = 1;
+}
+
+message DebugConsoleCommand {
+	enum PacketID {
+		ID = 123;
+	}
+	optional string command = 1;
+}
+
+message DebugConsoleGetCmdList {
+	enum PacketID {
+		ID = 125;
+	}
+}
+
+message DebugConsoleGetZones {
+	enum PacketID {
+		ID = 147;
+	}
+}
+
+message DebugConsoleResponse {
+	enum PacketID {
+		ID = 124;
+	}
+	enum ResponseType {
+		CONSOLE_OUTPUT = 0;
+		LOG_MESSAGE = 1;
+	}
+	optional string response = 1;
+	optional .BobNetProto.DebugConsoleResponse.ResponseType response_type = 2;
+}
+
+message DebugConsoleUpdateFromPane {
+	enum PacketID {
+		ID = 145;
+	}
+	optional string name = 1;
+	optional string value = 2;
+}
+
+message DebugConsoleZones {
+	message DebugConsoleZone {
+		optional string name = 1;
+		optional uint32 id = 2;
+	}
+	enum PacketID {
+		ID = 148;
+	}
+	repeated .BobNetProto.DebugConsoleZones.DebugConsoleZone zones = 1;
+}
+
+message DebugPaneDelItems {
+	message DebugPaneDelItem {
+		optional string name = 1;
+	}
+	enum PacketID {
+		ID = 143;
+	}
+	repeated .BobNetProto.DebugPaneDelItems.DebugPaneDelItem items = 1;
+}
+
+message DebugPaneNewItems {
+	message DebugPaneNewItem {
+		optional string name = 1;
+		optional string value = 2;
+	}
+	enum PacketID {
+		ID = 142;
+	}
+	repeated .BobNetProto.DebugPaneNewItems.DebugPaneNewItem items = 1;
+}
+
+message PACKET_TYPES {
+	enum BobNetCount {
+		COUNT = 500;
+	}
+}
+
+message Ping {
+	enum PacketID {
+		ID = 115;
+	}
+}
+
+message Pong {
+	enum PacketID {
+		ID = 116;
+	}
+}
+
+message AuroraHandshake {
+	enum PacketID {
+		ID = 168;
+	}
+	optional int32 game_handle = 1;
+	optional string password = 2;
+	optional int64 client_handle = 3;
+	optional int32 mission = 4;
+	optional string version = 5;
+	optional int32 old_platform = 6;
+	optional .PegasusShared.Platform platform = 7;
+}
+

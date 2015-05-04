@@ -1,0 +1,227 @@
+syntax = "proto2";
+package bnet.protocol.channel;
+import "bnet/protocol_0.proto";
+import "bnet/protocol/attribute.proto";
+import "bnet/protocol/invitation.proto";
+
+
+message GetChannelIdRequest {
+}
+
+message SubscribeChannelResponse {
+	optional uint64 object_id = 1;
+}
+
+message CreateChannelResponse {
+	optional uint64 object_id = 1;
+	optional .bnet.protocol.EntityId channel_id = 2;
+}
+
+message DissolveRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional uint32 reason = 2;
+}
+
+message FindChannelOptions {
+	optional uint32 start_index = 1;
+	optional uint32 max_results = 2 [default = 16];
+	optional string name = 3;
+	optional fixed32 program = 4;
+	optional fixed32 locale = 5;
+	optional uint32 capacity_full = 6;
+	optional .bnet.protocol.attribute.AttributeFilter attribute_filter = 7;
+	optional string channel_type = 8;
+	extensions 100 to 10000;
+}
+
+message GetChannelIdResponse {
+	optional .bnet.protocol.EntityId channel_id = 1;
+}
+
+message GetChannelInfoRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId channel_id = 2;
+	optional bool fetch_state = 3;
+	optional bool fetch_members = 4;
+}
+
+message JoinChannelResponse {
+	optional uint64 object_id = 1;
+	optional bool require_friend_validation = 2;
+	repeated .bnet.protocol.EntityId privileged_account = 3;
+}
+
+message LeaveNotification {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId member_id = 2;
+	optional uint32 reason = 3;
+}
+
+message MemberState {
+	repeated .bnet.protocol.attribute.Attribute attribute = 1;
+	repeated uint32 role = 2;
+	optional uint64 privileges = 3;
+	optional .bnet.protocol.AccountInfo info = 4;
+	optional bool hidden = 5;
+	extensions 100 to 10000;
+}
+
+message Message {
+	repeated .bnet.protocol.attribute.Attribute attribute = 1;
+	optional uint32 role = 2;
+	extensions 100 to 10000;
+}
+
+message RemoveMemberRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId member_id = 2;
+	optional uint32 reason = 3;
+}
+
+message RemoveNotification {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId member_id = 2;
+	optional uint32 reason = 3;
+}
+
+message SendMessageNotification {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.channel.Message message = 2;
+	optional uint64 required_privileges = 3;
+}
+
+message SendMessageRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.channel.Message message = 2;
+	optional uint64 required_privileges = 3;
+}
+
+message SetRolesRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	repeated uint32 role = 2;
+	repeated .bnet.protocol.EntityId member_id = 3;
+}
+
+message SubscribeChannelRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId channel_id = 2;
+	optional uint64 object_id = 3;
+}
+
+message UnsubscribeMemberRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.EntityId member_id = 2;
+}
+
+message AddMemberRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.Identity member_identity = 2;
+	optional .bnet.protocol.channel.MemberState member_state = 3;
+	optional uint64 object_id = 4;
+	optional bool subscribe = 5 [default = true];
+}
+
+message FindChannelRequest {
+	optional .bnet.protocol.Identity agent_identity = 1;
+	optional .bnet.protocol.channel.FindChannelOptions options = 2;
+}
+
+message JoinChannelRequest {
+	optional .bnet.protocol.Identity agent_identity = 1;
+	optional .bnet.protocol.channel.MemberState member_state = 2;
+	optional .bnet.protocol.EntityId channel_id = 3;
+	optional uint64 object_id = 4;
+	repeated .bnet.protocol.EntityId friend_account_id = 5;
+	optional bool local_subscriber = 6 [default = true];
+}
+
+message Member {
+	optional .bnet.protocol.Identity identity = 1;
+	optional .bnet.protocol.channel.MemberState state = 2;
+}
+
+message JoinNotification {
+	optional .bnet.protocol.channel.Member member = 1;
+}
+
+message UpdateMemberStateNotification {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	repeated .bnet.protocol.channel.Member state_change = 2;
+	repeated uint32 removed_role = 3;
+}
+
+message UpdateMemberStateRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	repeated .bnet.protocol.channel.Member state_change = 2;
+	repeated uint32 removed_role = 3;
+}
+
+message ChannelState {
+	enum PrivacyLevel {
+		PRIVACY_LEVEL_OPEN = 1;
+		PRIVACY_LEVEL_OPEN_INVITATION_AND_FRIEND = 2;
+		PRIVACY_LEVEL_OPEN_INVITATION = 3;
+		PRIVACY_LEVEL_CLOSED = 4;
+	}
+	optional uint32 max_members = 1;
+	optional uint32 min_members = 2;
+	repeated .bnet.protocol.attribute.Attribute attribute = 3;
+	repeated .bnet.protocol.invitation.Invitation invitation = 4;
+	optional uint32 max_invitations = 5;
+	optional uint32 reason = 6;
+	optional .bnet.protocol.channel.ChannelState.PrivacyLevel privacy_level = 7 [default = PRIVACY_LEVEL_OPEN];
+	optional string name = 8;
+	optional string delegate_name = 9;
+	optional string channel_type = 10 [default = "default"];
+	optional fixed32 program = 11;
+	optional bool allow_offline_members = 12;
+	optional bool subscribe_to_presence = 13 [default = true];
+	extensions 100 to 10000;
+}
+
+message AddNotification {
+	optional .bnet.protocol.channel.Member self = 1;
+	repeated .bnet.protocol.channel.Member member = 2;
+	optional .bnet.protocol.channel.ChannelState channel_state = 3;
+}
+
+message ChannelDescription {
+	optional .bnet.protocol.EntityId channel_id = 1;
+	optional uint32 current_members = 2;
+	optional .bnet.protocol.channel.ChannelState state = 3;
+}
+
+message ChannelInfo {
+	optional .bnet.protocol.channel.ChannelDescription description = 1;
+	repeated .bnet.protocol.channel.Member member = 2;
+	extensions 100 to 10000;
+}
+
+message CreateChannelRequest {
+	optional .bnet.protocol.Identity agent_identity = 1;
+	optional .bnet.protocol.channel.MemberState member_state = 2;
+	optional .bnet.protocol.channel.ChannelState channel_state = 3;
+	optional .bnet.protocol.EntityId channel_id = 4;
+	optional uint64 object_id = 5;
+	optional .bnet.protocol.EntityId local_agent = 6;
+	optional .bnet.protocol.channel.MemberState local_member_state = 7;
+}
+
+message FindChannelResponse {
+	repeated .bnet.protocol.channel.ChannelDescription channel = 1;
+}
+
+message GetChannelInfoResponse {
+	optional .bnet.protocol.channel.ChannelInfo channel_info = 1;
+}
+
+message UpdateChannelStateNotification {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.channel.ChannelState state_change = 2;
+}
+
+message UpdateChannelStateRequest {
+	optional .bnet.protocol.EntityId agent_id = 1;
+	optional .bnet.protocol.channel.ChannelState state_change = 2;
+}
+

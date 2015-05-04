@@ -1,0 +1,10 @@
+syntax = "proto2";
+package bnet.protocol.resources;
+
+
+message ContentHandleRequest {
+	optional fixed32 program_id = 1;
+	optional fixed32 stream_id = 2;
+	optional fixed32 locale = 3 [default = 1701729619];
+}
+

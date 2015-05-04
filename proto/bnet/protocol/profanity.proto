@@ -1,0 +1,13 @@
+syntax = "proto2";
+package bnet.protocol.profanity;
+
+
+message WordFilter {
+	optional string type = 1;
+	optional string regex = 2;
+}
+
+message WordFilters {
+	repeated .bnet.protocol.profanity.WordFilter filters = 1;
+}
+

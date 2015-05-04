@@ -1,0 +1,265 @@
+syntax = "proto2";
+package PegasusShared;
+
+
+message AdventureProgress {
+	enum Flags {
+		OWNED = 1;
+		DEFEAT_HEROIC_MISSION_1 = 2;
+		DEFEAT_HEROIC_MISSION_2 = 4;
+		DEFEAT_HEROIC_MISSION_3 = 8;
+		DEFEAT_HEROIC_MISSION_4 = 16;
+		DEFEAT_CLASS_CHALLENGE_MISSION_1 = 256;
+		DEFEAT_CLASS_CHALLENGE_MISSION_2 = 512;
+	}
+	optional int32 wing_id = 1;
+	optional int32 progress = 2;
+	optional int32 ack = 3;
+	optional uint64 flags = 4;
+}
+
+enum BattlePayProvider {
+	BP_PROVIDER_BLIZZARD = 1;
+	BP_PROVIDER_APPLE = 2;
+	BP_PROVIDER_GOOGLE_PLAY = 3;
+	BP_PROVIDER_AMAZON = 4;
+}
+
+enum BnetGameType {
+	BGT_UNKNOWN = 0;
+	BGT_FRIENDS = 1;
+	BGT_RANKED = 2;
+	BGT_ARENA = 3;
+	BGT_VS_AI = 4;
+	BGT_TUTORIAL = 5;
+	BGT_ASYNC = 6;
+	BGT_NEWBIE = 9;
+	BGT_NORMAL = 10;
+	BGT_TEST1 = 11;
+	BGT_TEST2 = 12;
+	BGT_TEST3 = 13;
+	BGT_LAST = 14;
+}
+
+message BnetId {
+	optional uint64 hi = 1;
+	optional uint64 lo = 2;
+}
+
+message CardDef {
+	optional int32 asset = 1;
+	optional int32 premium = 2;
+}
+
+enum DatabaseAction {
+	DB_A_UNKNOWN = 0;
+	DB_A_GET_DECK = 1;
+	DB_A_CREATE_DECK = 2;
+	DB_A_RENAME_DECK = 3;
+	DB_A_DELETE_DECK = 4;
+	DB_A_SET_DECK = 5;
+	DB_A_OPEN_BOOSTER = 6;
+	DB_A_GAMES_INFO = 7;
+}
+
+enum DatabaseResult {
+	DB_E_SQL_EX = -1;
+	DB_E_UNKNOWN = 0;
+	DB_E_SUCCESS = 1;
+	DB_E_NOT_OWNED = 2;
+	DB_E_CONSTRAINT = 3;
+	DB_E_NOT_FOUND = 4;
+	DB_E_EXCEPTION = 9;
+}
+
+message Date {
+	optional int32 year = 1;
+	optional int32 month = 2;
+	optional int32 day = 3;
+	optional int32 hours = 4;
+	optional int32 min = 5;
+	optional int32 sec = 6;
+}
+
+message CardStack {
+	optional .PegasusShared.CardDef card_def = 1;
+	optional .PegasusShared.Date latest_insert_date = 2;
+	optional int32 count = 3;
+	optional int32 num_seen = 4;
+}
+
+message DeckCardData {
+	optional .PegasusShared.CardDef def = 1;
+	optional int32 handle = 2;
+	optional int32 qty = 3;
+	optional int32 prev = 5;
+}
+
+message DeckInfo {
+	enum DeckType {
+		NORMAL_DECK = 1;
+		AI_DECK = 2;
+		DRAFT_DECK = 4;
+		PRECON_DECK = 5;
+	}
+	optional int64 id = 1;
+	optional string name = 2;
+	optional int32 card_back = 3;
+	optional int32 hero = 4;
+	optional .PegasusShared.DeckInfo.DeckType deck_type = 5 [default = NORMAL_DECK];
+	optional int64 validity = 6;
+	optional int32 hero_premium = 7;
+	optional bool card_back_override = 8;
+}
+
+enum GameType {
+	GT_UNKNOWN = 0;
+	GT_VS_AI = 1;
+	GT_VS_FRIEND = 2;
+	GT_TUTORIAL = 4;
+	GT_ARENA = 5;
+	GT_TEST = 6;
+	GT_RANKED = 7;
+	GT_UNRANKED = 8;
+	GT_LAST = 14;
+}
+
+message Platform {
+	optional int32 os = 1;
+	optional int32 screen = 2;
+	optional string name = 3;
+}
+
+message PlayQueueInfo {
+	optional .PegasusShared.BnetGameType game_type = 1;
+}
+
+message ProfileNoticeAdventureProgress {
+	enum NoticeID {
+		ID = 14;
+	}
+	optional int32 wing_id = 1;
+}
+
+message ProfileNoticeBonusStars {
+	enum NoticeID {
+		ID = 12;
+	}
+	optional int32 star_level = 1;
+	optional int32 stars = 2;
+}
+
+message ProfileNoticeCardBack {
+	enum NoticeID {
+		ID = 11;
+	}
+	optional int32 card_back = 1;
+}
+
+message ProfileNoticeDisconnectedGameResult {
+	enum GameResult {
+		GR_UNKNOWN = 0;
+		GR_PLAYING = 1;
+		GR_WINNER = 2;
+		GR_TIE = 3;
+	}
+	enum NoticeID {
+		ID = 4;
+	}
+	enum PlayerResult {
+		PR_UNKNOWN = 0;
+		PR_WON = 1;
+		PR_LOST = 2;
+		PR_DISCONNECTED = 3;
+		PR_QUIT = 4;
+	}
+	optional .PegasusShared.GameType game_type = 8;
+	optional int32 mission_id = 9;
+	optional .PegasusShared.ProfileNoticeDisconnectedGameResult.GameResult game_result = 10;
+	optional .PegasusShared.ProfileNoticeDisconnectedGameResult.PlayerResult your_result = 11;
+	optional .PegasusShared.ProfileNoticeDisconnectedGameResult.PlayerResult opponent_result = 12;
+}
+
+message ProfileNoticeMedal {
+	enum NoticeID {
+		ID = 1;
+	}
+	optional int32 star_level = 1;
+	optional int32 legend_rank = 2;
+}
+
+message ProfileNoticePreconDeck {
+	enum NoticeID {
+		ID = 5;
+	}
+	optional int64 deck = 1;
+	optional int32 hero = 2;
+}
+
+message ProfileNoticePurchase {
+	enum NoticeID {
+		ID = 10;
+	}
+	optional string product_id = 1;
+	optional int64 data = 2;
+	optional int32 currency = 3;
+}
+
+message ProfileNoticeRewardBooster {
+	enum NoticeID {
+		ID = 2;
+	}
+	optional int32 booster_type = 1;
+	optional int32 booster_count = 2;
+}
+
+message ProfileNoticeRewardCard {
+	enum NoticeID {
+		ID = 3;
+	}
+	optional .PegasusShared.CardDef card = 1;
+	optional int32 quantity = 2;
+}
+
+message ProfileNoticeRewardCard2x {
+	enum NoticeID {
+		ID = 13;
+	}
+}
+
+message ProfileNoticeRewardDust {
+	enum NoticeID {
+		ID = 6;
+	}
+	optional int32 amount = 1;
+}
+
+message ProfileNoticeRewardForge {
+	enum NoticeID {
+		ID = 8;
+	}
+	optional int32 quantity = 1;
+}
+
+message ProfileNoticeRewardGold {
+	enum NoticeID {
+		ID = 9;
+	}
+	optional int32 amount = 1;
+}
+
+message ProfileNoticeRewardMount {
+	enum NoticeID {
+		ID = 7;
+	}
+	optional int32 mount_id = 1;
+}
+
+enum ProtocolVersion {
+	PV_MAJOR = 2;
+	PV_MINOR = 4;
+	PV_PATCH = 0;
+	PV_SKU = 0;
+	option allow_alias = true;
+}
+

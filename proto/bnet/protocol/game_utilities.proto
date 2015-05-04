@@ -1,0 +1,59 @@
+syntax = "proto2";
+package bnet.protocol.game_utilities;
+import "bnet/protocol/attribute.proto";
+import "bnet/protocol_0.proto";
+
+
+message ClientResponse {
+	repeated .bnet.protocol.attribute.Attribute attribute = 1;
+}
+
+message ServerResponse {
+	repeated .bnet.protocol.attribute.Attribute attribute = 1;
+}
+
+message PlayerVariables {
+	optional .bnet.protocol.Identity identity = 1;
+	optional double rating = 2;
+	repeated .bnet.protocol.attribute.Attribute attribute = 3;
+}
+
+message GetPlayerVariablesResponse {
+	repeated .bnet.protocol.game_utilities.PlayerVariables player_variables = 1;
+}
+
+message ClientRequest {
+	repeated .bnet.protocol.attribute.Attribute attribute = 1;
+	optional .bnet.protocol.ProcessId host = 2;
+	optional .bnet.protocol.EntityId bnet_account_id = 3;
+	optional .bnet.protocol.EntityId game_account_id = 4;
+}
+
+message GameAccountOfflineNotification {
+	optional .bnet.protocol.EntityId game_account_id = 1;
+	optional .bnet.protocol.ProcessId host = 2;
+}
+
+message GameAccountOnlineNotification {
+	optional .bnet.protocol.EntityId game_account_id = 1;
+	optional .bnet.protocol.ProcessId host = 2;
+}
+
+message GetPlayerVariablesRequest {
+	repeated .bnet.protocol.game_utilities.PlayerVariables player_variables = 1;
+	optional .bnet.protocol.ProcessId host = 2;
+}
+
+message PresenceChannelCreatedRequest {
+	optional .bnet.protocol.EntityId id = 1;
+	optional .bnet.protocol.EntityId game_account_id = 3;
+	optional .bnet.protocol.EntityId bnet_account_id = 4;
+	optional .bnet.protocol.ProcessId host = 5;
+}
+
+message ServerRequest {
+	repeated .bnet.protocol.attribute.Attribute attribute = 1;
+	optional fixed32 program = 2;
+	optional .bnet.protocol.ProcessId host = 3;
+}
+

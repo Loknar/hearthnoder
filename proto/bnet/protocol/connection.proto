@@ -1,0 +1,60 @@
+syntax = "proto2";
+package bnet.protocol.connection;
+import "bnet/protocol_0.proto";
+
+
+message BindResponse {
+	repeated uint32 imported_service_id = 1;
+}
+
+message BoundService {
+	optional fixed32 hash = 1;
+	optional uint32 id = 2;
+}
+
+message BindRequest {
+	repeated fixed32 imported_service_hash = 1;
+	repeated .bnet.protocol.connection.BoundService exported_service = 2;
+}
+
+message DisconnectNotification {
+	optional uint32 error_code = 1;
+	optional string reason = 2;
+}
+
+message DisconnectRequest {
+	optional uint32 error_code = 1;
+}
+
+message EchoRequest {
+	optional fixed64 time = 1;
+	optional bool network_only = 2;
+	optional bytes payload = 3;
+}
+
+message EchoResponse {
+	optional fixed64 time = 1;
+	optional bytes payload = 2;
+}
+
+message EncryptRequest {
+}
+
+message ConnectionMeteringContentHandles {
+	repeated .bnet.protocol.ContentHandle content_handle = 1;
+}
+
+message ConnectRequest {
+	optional .bnet.protocol.ProcessId client_id = 1;
+	optional .bnet.protocol.connection.BindRequest bind_request = 2;
+}
+
+message ConnectResponse {
+	optional .bnet.protocol.ProcessId server_id = 1;
+	optional .bnet.protocol.ProcessId client_id = 2;
+	optional uint32 bind_result = 3;
+	optional .bnet.protocol.connection.BindResponse bind_response = 4;
+	optional .bnet.protocol.connection.ConnectionMeteringContentHandles content_handle_array = 5;
+	optional uint64 server_time = 6;
+}
+

@@ -1,0 +1,450 @@
+syntax = "proto2";
+package bnet.protocol.account;
+import "bnet/protocol/account_0.proto";
+import "bnet/protocol_0.proto";
+
+
+message AccountLevelInfo {
+	repeated .bnet.protocol.account.AccountLicense licenses = 3;
+	optional fixed32 default_currency = 4;
+	optional string country = 5;
+	optional uint32 preferred_region = 6;
+}
+
+message AccountServiceRegion {
+	optional uint32 id = 1;
+	optional string shard = 2;
+}
+
+message AccountServiceConfig {
+	repeated .bnet.protocol.account.AccountServiceRegion region = 1;
+}
+
+message CAIS {
+	optional uint32 played_minutes = 1;
+	optional uint32 rested_minutes = 2;
+	optional uint64 last_heard_time = 3;
+}
+
+message CreateGameAccountRequest {
+	optional .bnet.protocol.account.AccountId account = 1;
+	optional uint32 region = 2;
+	optional fixed32 program = 3;
+	optional uint32 realm_permissions = 4 [default = 1];
+}
+
+message CredentialUpdateRequest {
+	optional .bnet.protocol.account.AccountId account = 1;
+	repeated .bnet.protocol.account.AccountCredential old_credentials = 2;
+	repeated .bnet.protocol.account.AccountCredential new_credentials = 3;
+	optional uint32 region = 4;
+}
+
+message CredentialUpdateResponse {
+}
+
+message CurrencyRestriction {
+	optional string currency = 1;
+	optional string authenticator_cap = 2;
+	optional string soft_cap = 3;
+}
+
+message FlagUpdateRequest {
+	optional .bnet.protocol.account.AccountId account = 1;
+	optional uint32 region = 2;
+	optional uint64 flag = 3;
+	optional bool active = 4;
+}
+
+message FlagUpdateResponse {
+}
+
+message GameAccountFieldOptions {
+	optional bool all_fields = 1;
+	optional bool field_game_level_info = 2;
+	optional bool field_game_time_info = 3;
+	optional bool field_game_status = 4;
+}
+
+message GameAccountFieldTags {
+	optional fixed32 game_level_info_tag = 2;
+	optional fixed32 game_time_info_tag = 3;
+	optional fixed32 game_status_tag = 4;
+}
+
+message GameAccountHandle {
+	optional fixed32 id = 1;
+	optional fixed32 program = 2;
+	optional uint32 region = 3;
+}
+
+message AccountReference {
+	optional fixed32 id = 1;
+	optional string email = 2;
+	optional .bnet.protocol.account.GameAccountHandle handle = 3;
+	optional string battle_tag = 4;
+	optional uint32 region = 10;
+}
+
+message CacheExpireRequest {
+	repeated .bnet.protocol.account.AccountId account = 1;
+	repeated .bnet.protocol.account.GameAccountHandle game_account = 2;
+	repeated string email = 3;
+}
+
+message GameAccountBlob {
+	optional .bnet.protocol.account.GameAccountHandle game_account = 1;
+	optional string name = 2;
+	optional uint32 realm_permissions = 3;
+	optional uint32 status = 4;
+	optional uint64 flags = 5;
+	optional uint32 billing_flags = 6;
+	optional uint64 cache_expiration = 7;
+	optional uint64 subscription_expiration = 10;
+	optional uint32 units_remaining = 11;
+	optional uint64 status_expiration = 12;
+	optional uint32 box_level = 13;
+	optional uint64 box_level_expiration = 14;
+	repeated .bnet.protocol.account.AccountLicense licenses = 20;
+}
+
+message GameAccountBlobList {
+	repeated .bnet.protocol.account.GameAccountBlob blob = 1;
+}
+
+message GameAccountLink {
+	optional .bnet.protocol.account.GameAccountHandle game_account = 1;
+	optional string name = 2;
+}
+
+message GameAccountList {
+	optional uint32 region = 3;
+	repeated .bnet.protocol.account.GameAccountHandle handle = 4;
+}
+
+message GameLevelInfo {
+	optional bool is_starter_edition = 3;
+	optional bool is_trial = 4;
+	optional bool is_lifetime = 5;
+	optional bool is_restricted = 6;
+	optional bool is_beta = 7;
+	optional string name = 8;
+	optional fixed32 program = 9;
+	repeated .bnet.protocol.account.AccountLicense licenses = 10;
+	optional uint32 realm_permissions = 11;
+}
+
+message GameSessionLocation {
+	optional string ip_address = 1;
+	optional uint32 country = 2;
+	optional string city = 3;
+}
+
+message GameSessionInfo {
+	optional uint32 start_time = 3;
+	optional .bnet.protocol.account.GameSessionLocation location = 4;
+	optional bool has_benefactor = 5;
+	optional bool is_using_igr = 6;
+	optional bool parental_controls_active = 7;
+}
+
+message GameSessionUpdateInfo {
+	optional .bnet.protocol.account.CAIS cais = 8;
+}
+
+message GameAccountSessionNotification {
+	optional .bnet.protocol.account.GameAccountHandle game_account = 1;
+	optional .bnet.protocol.account.GameSessionUpdateInfo session_info = 2;
+}
+
+message GameStatus {
+	optional bool is_suspended = 4;
+	optional bool is_banned = 5;
+	optional uint64 suspension_expires = 6;
+	optional fixed32 program = 7;
+}
+
+message GameTimeInfo {
+	optional bool is_unlimited_play_time = 3;
+	optional uint64 play_time_expires = 5;
+	optional bool is_subscription = 6;
+	optional bool is_recurring_subscription = 7;
+}
+
+message GameAccountState {
+	optional .bnet.protocol.account.GameLevelInfo game_level_info = 1;
+	optional .bnet.protocol.account.GameTimeInfo game_time_info = 2;
+	optional .bnet.protocol.account.GameStatus game_status = 3;
+}
+
+message GameAccountStateNotification {
+	optional .bnet.protocol.account.GameAccountState state = 1;
+	optional uint64 subscriber_id = 2;
+	optional .bnet.protocol.account.GameAccountFieldTags game_account_tags = 3;
+	optional bool subscription_completed = 4;
+}
+
+message GameAccountStateTagged {
+	optional .bnet.protocol.account.GameAccountState game_account_state = 1;
+	optional .bnet.protocol.account.GameAccountFieldTags game_account_tags = 2;
+}
+
+message GameTimeRemainingInfo {
+	optional uint32 minutes_remaining = 1;
+	optional uint32 parental_daily_minutes_remaining = 2;
+	optional uint32 parental_weekly_minutes_remaining = 3;
+}
+
+message GetAccountRequest {
+	optional .bnet.protocol.account.AccountReference ref = 1;
+	optional bool fetch_all = 10;
+	optional bool fetch_blob = 11;
+	optional bool fetch_id = 12;
+	optional bool fetch_email = 13;
+	optional bool fetch_battle_tag = 14;
+	optional bool fetch_full_name = 15;
+	optional bool fetch_links = 16;
+	optional bool fetch_parental_controls = 17;
+}
+
+message GetCAISInfoResponse {
+	optional .bnet.protocol.account.CAIS cais_info = 1;
+}
+
+message GetEBalanceRequest {
+	optional .bnet.protocol.account.AccountId account_id = 1;
+	optional string currency = 2;
+	optional uint32 currency_home_region = 3;
+}
+
+message GetEBalanceResponse {
+	optional string balance = 1;
+}
+
+message GetEBalanceRestrictionsRequest {
+	optional uint32 currency_home_region = 1;
+}
+
+message GetEBalanceRestrictionsResponse {
+	repeated .bnet.protocol.account.CurrencyRestriction currency_restrictions = 1;
+}
+
+message GetGameAccountStateResponse {
+	optional .bnet.protocol.account.GameAccountState state = 1;
+	optional .bnet.protocol.account.GameAccountFieldTags tags = 2;
+}
+
+message GetGameSessionInfoResponse {
+	optional .bnet.protocol.account.GameSessionInfo session_info = 2;
+}
+
+message GetGameTimeRemainingInfoResponse {
+	optional .bnet.protocol.account.GameTimeRemainingInfo game_time_remaining_info = 1;
+}
+
+message GetLicensesResponse {
+	repeated .bnet.protocol.account.AccountLicense licenses = 1;
+}
+
+message GetWalletListRequest {
+	optional .bnet.protocol.account.AccountId account_id = 1;
+	optional bool refresh = 2;
+}
+
+message IsIgrAddressRequest {
+	optional string client_address = 1;
+	optional uint32 region = 2;
+}
+
+message ParentalControlInfo {
+	optional string timezone = 3;
+	optional uint32 minutes_per_day = 4;
+	optional uint32 minutes_per_week = 5;
+	optional bool can_receive_voice = 6;
+	optional bool can_send_voice = 7;
+	repeated bool play_schedule = 8;
+}
+
+message AccountBlob {
+	optional fixed32 id = 2;
+	optional uint32 region = 3;
+	repeated string email = 4;
+	optional uint64 flags = 5;
+	optional uint64 secure_release = 6;
+	optional uint64 whitelist_start = 7;
+	optional uint64 whitelist_end = 8;
+	optional string full_name = 10;
+	repeated .bnet.protocol.account.AccountLicense licenses = 20;
+	repeated .bnet.protocol.account.AccountCredential credentials = 21;
+	repeated .bnet.protocol.account.GameAccountLink account_links = 22;
+	optional string battle_tag = 23;
+	optional fixed32 default_currency = 25;
+	optional uint32 legal_region = 26;
+	optional fixed32 legal_locale = 27;
+	optional uint64 cache_expiration = 30;
+	optional .bnet.protocol.account.ParentalControlInfo parental_control_info = 31;
+	optional string country = 32;
+	optional uint32 preferred_region = 33;
+}
+
+message AccountBlobList {
+	repeated .bnet.protocol.account.AccountBlob blob = 1;
+}
+
+message GetAccountResponse {
+	optional .bnet.protocol.account.AccountBlob blob = 11;
+	optional .bnet.protocol.account.AccountId id = 12;
+	repeated string email = 13;
+	optional string battle_tag = 14;
+	optional string full_name = 15;
+	repeated .bnet.protocol.account.GameAccountLink links = 16;
+	optional .bnet.protocol.account.ParentalControlInfo parental_control_info = 17;
+}
+
+message PrivacyInfo {
+	enum GameInfoPrivacy {
+		PRIVACY_ME = 0;
+		PRIVACY_FRIENDS = 1;
+		PRIVACY_EVERYONE = 2;
+	}
+	optional bool is_using_rid = 3;
+	optional bool is_real_id_visible_for_view_friends = 4;
+	optional bool is_hidden_from_friend_finder = 5;
+	optional .bnet.protocol.account.PrivacyInfo.GameInfoPrivacy game_info_privacy = 6 [default = PRIVACY_FRIENDS];
+}
+
+message AccountState {
+	optional .bnet.protocol.account.AccountLevelInfo account_level_info = 1;
+	optional .bnet.protocol.account.PrivacyInfo privacy_info = 2;
+	optional .bnet.protocol.account.ParentalControlInfo parental_control_info = 3;
+	repeated .bnet.protocol.account.GameLevelInfo game_level_info = 5;
+	repeated .bnet.protocol.account.GameStatus game_status = 6;
+	repeated .bnet.protocol.account.GameAccountList game_accounts = 7;
+}
+
+message ProgramTag {
+	optional fixed32 program = 1;
+	optional fixed32 tag = 2;
+}
+
+message RegionTag {
+	optional fixed32 region = 1;
+	optional fixed32 tag = 2;
+}
+
+message AccountFieldTags {
+	optional fixed32 account_level_info_tag = 2;
+	optional fixed32 privacy_info_tag = 3;
+	optional fixed32 parental_control_info_tag = 4;
+	repeated .bnet.protocol.account.ProgramTag game_level_info_tags = 7;
+	repeated .bnet.protocol.account.ProgramTag game_status_tags = 9;
+	repeated .bnet.protocol.account.RegionTag game_account_tags = 11;
+}
+
+message AccountStateNotification {
+	optional .bnet.protocol.account.AccountState state = 1;
+	optional uint64 subscriber_id = 2;
+	optional .bnet.protocol.account.AccountFieldTags account_tags = 3;
+	optional bool subscription_completed = 4;
+}
+
+message AccountStateTagged {
+	optional .bnet.protocol.account.AccountState account_state = 1;
+	optional .bnet.protocol.account.AccountFieldTags tags = 2;
+}
+
+message GameAccountNotification {
+	repeated .bnet.protocol.account.GameAccountList region_delta = 1;
+	optional uint64 subscriber_id = 2;
+	optional .bnet.protocol.account.AccountFieldTags account_tags = 3;
+}
+
+message GetAccountStateResponse {
+	optional .bnet.protocol.account.AccountState state = 1;
+	optional .bnet.protocol.account.AccountFieldTags tags = 2;
+}
+
+message Wallet {
+	optional uint32 region = 1;
+	optional uint64 wallet_id = 2;
+	optional uint32 wallet_type = 3;
+	optional string description = 4;
+	optional uint32 country_id = 5;
+	optional string state = 6;
+	optional string city = 7;
+	optional string postal_code = 8;
+	optional bytes payment_info = 9;
+	optional string bin = 10;
+	optional string locale_id = 11;
+	optional string street = 12;
+	optional string first_name = 13;
+	optional string last_name = 14;
+	optional uint64 birth_date = 15;
+}
+
+message GetWalletListResponse {
+	repeated .bnet.protocol.account.Wallet wallets = 1;
+}
+
+message Wallets {
+	repeated .bnet.protocol.account.Wallet wallets = 1;
+}
+
+message ForwardCacheExpireRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+}
+
+message GetAccountStateRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+	optional uint32 program = 2;
+	optional uint32 region = 3;
+	optional .bnet.protocol.account.AccountFieldOptions options = 10;
+	optional .bnet.protocol.account.AccountFieldTags tags = 11;
+}
+
+message GetCAISInfoRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+}
+
+message GetGameAccountStateRequest {
+	optional .bnet.protocol.EntityId account_id = 1;
+	optional .bnet.protocol.EntityId game_account_id = 2;
+	optional .bnet.protocol.account.GameAccountFieldOptions options = 10;
+	optional .bnet.protocol.account.GameAccountFieldTags tags = 11;
+}
+
+message GetGameSessionInfoRequest {
+	optional .bnet.protocol.EntityId entity_id = 1;
+}
+
+message GetGameTimeRemainingInfoRequest {
+	optional .bnet.protocol.EntityId game_account_id = 1;
+	optional .bnet.protocol.EntityId account_id = 2;
+}
+
+message GetLicensesRequest {
+	optional .bnet.protocol.EntityId target_id = 1;
+	optional bool get_account_licenses = 2;
+	optional bool get_game_account_licenses = 3;
+	optional bool get_dynamic_account_licenses = 4;
+	optional fixed32 program_id = 5;
+	optional bool exclude_unknown_program = 6;
+}
+
+message SubscriberReference {
+	optional uint64 object_id = 1;
+	optional .bnet.protocol.EntityId entity_id = 2;
+	optional .bnet.protocol.account.AccountFieldOptions account_options = 3;
+	optional .bnet.protocol.account.AccountFieldTags account_tags = 4;
+	optional .bnet.protocol.account.GameAccountFieldOptions game_account_options = 5;
+	optional .bnet.protocol.account.GameAccountFieldTags game_account_tags = 6;
+}
+
+message SubscriptionUpdateRequest {
+	repeated .bnet.protocol.account.SubscriberReference ref = 2;
+}
+
+message SubscriptionUpdateResponse {
+	repeated .bnet.protocol.account.SubscriberReference ref = 1;
+}
+
