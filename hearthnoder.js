@@ -4,6 +4,7 @@ var path = require('path');
 
 var bufferpack = require('bufferpack');
 var buffertools = require('buffertools');
+var protobuf = require('protobufjs');
 var moment = require('moment');
 
 var Cap = require('cap').Cap;
@@ -17,6 +18,25 @@ var bufSize = 10 * 1024 * 1024;
 var buffer = new Buffer(65535);
 var linkType = c.open(device, filter, bufSize, buffer);
 c.setMinBytes && c.setMinBytes(0);
+
+// load proto definition files
+filelister = require('./filelister');
+var protoFiles = filelister.getAllFilesSync('proto');
+protoFiles = protoFiles.filter(function(i){return path.extname(i)=='.proto'});
+for(i=0;i<protoFiles.length;i++) protoFiles[i] = protoFiles[i].replace('proto/', '');
+var protoRoot = path.join(__dirname, 'proto');
+
+var builder = protobuf.protoFromFile({
+    'file': protoFiles[0],
+    'root': protoRoot
+});
+for(i=1;i<protoFiles.length;i++) {
+    protobuf.protoFromFile({
+        'file': protoFiles[i],
+        'root': protoRoot
+    }, builder);
+}
+var root = builder.build();
 
 var blacklist = [
     '12.129.242.24',   // iir.blizzard.com
@@ -41,7 +61,8 @@ var ip_blacklisted = function(ip, blacklist) {
     return blacklist.indexOf(ip) != -1;
 }
 
-console.log(device);
+console.log('Listening to tcp traffic on '+device+'.');
+console.log('Press ctrl+c to quit.')
 
 var timestamp_instance = moment().format('YYYY-MM-DDTHH-mm-ss');
 
@@ -117,7 +138,7 @@ c.on('packet', function(nbytes, trunc) {
 function exitHandler(options, err) {
     if (options.cleanup) {
         logger.end();
-        console.log('\nDo cleanup.');
+        console.log('\nShutting down.');
     }
     if (err) console.log(err.stack);
     if (options.exit) process.exit();
