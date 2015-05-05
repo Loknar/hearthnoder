@@ -18,7 +18,7 @@ Afterwards run `hearthnoder.js` with node.js as Superuser (sudo is required to a
 
 Hearthstone uses [Google Protocol Buffers](https://developers.google.com/protocol-buffers/) for network communication, which is a method of serializing structured data. To make sense of the packet data we need to get our hands on the Hearthstone `proto definition files` and then use those files to read the packets via possibly something like [protobufjs](https://www.npmjs.com/package/protobufjs).
 
-###Edit:
+Edit:
 
 [HearthSim/csharp-proto-extractor](https://github.com/HearthSim/csharp-proto-extractor) can be used to extract protobuf definitions from Hearthstone. Already extracted protobuf definitions with this tool are available in [HearthSim/hs-proto](https://github.com/HearthSim/hs-proto).
 
