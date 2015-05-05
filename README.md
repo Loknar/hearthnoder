@@ -20,7 +20,7 @@ Hearthstone uses [Google Protocol Buffers](https://developers.google.com/protoco
 
 Edit:
 
-[HearthSim/csharp-proto-extractor](https://github.com/HearthSim/csharp-proto-extractor) can be used to extract protobuf definitions from Hearthstone. Already extracted protobuf definitions with this tool are available in [HearthSim/hs-proto](https://github.com/HearthSim/hs-proto).
+[HearthSim/csharp-proto-extractor](https://github.com/HearthSim/csharp-proto-extractor) can be used to extract protobuf definitions from Hearthstone. Already extracted protobuf definitions using this tool are available here: [HearthSim/hs-proto](https://github.com/HearthSim/hs-proto).
 
 ## Credits
 
