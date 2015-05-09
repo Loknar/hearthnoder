@@ -9,7 +9,6 @@ var filelister = require('./filelister');
 var protoFiles = filelister.getAllFilesSync('proto');
 protoFiles = protoFiles.filter(function(i){return path.extname(i)=='.proto'});
 for(i=0;i<protoFiles.length;i++) protoFiles[i] = protoFiles[i].replace('proto/', '');
-console.log(protoFiles);
 
 var protoRoot = __dirname;
 
