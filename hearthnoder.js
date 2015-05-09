@@ -2,6 +2,7 @@ var fs = require("fs");
 var util = require('util');
 var path = require('path');
 
+var ipUtils = require('ip');
 var protobuf = require('protobufjs');
 var moment = require('moment');
 
@@ -10,7 +11,7 @@ var decoders = require('cap').decoders;
 var PROTOCOL = decoders.PROTOCOL;
 
 var c = new Cap();
-var device = "en1"; // Cap.findDevice('localhost'),
+var device = Cap.findDevice(ipUtils.address());
 var filter = '(tcp or udp) and ((dst port 1119 or dst port 3724) or (src port 1119 or src port 3724))';
 var bufSize = 10 * 1024 * 1024;
 var buffer = new Buffer(65535);

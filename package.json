@@ -14,6 +14,7 @@
   "dependencies": {
     "cap": "~0.0.13",
     "moment": "~2.10.2",
-    "protobufjs": "~4.0.0-b2"
+    "protobufjs": "~4.0.0-b2",
+    "ip": "0.3.2"
   }
 }
