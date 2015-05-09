@@ -12,7 +12,6 @@ for(i=0;i<protoFiles.length;i++) protoFiles[i] = protoFiles[i].replace('proto/',
 console.log(protoFiles);
 
 var protoRoot = __dirname;
-console.log(protoRoot);
 
 var builder = protobuf.protoFromFile({
     'file': protoFiles[0],
