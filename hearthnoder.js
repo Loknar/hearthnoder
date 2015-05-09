@@ -2,8 +2,6 @@ var fs = require("fs");
 var util = require('util');
 var path = require('path');
 
-var bufferpack = require('bufferpack');
-var buffertools = require('buffertools');
 var protobuf = require('protobufjs');
 var moment = require('moment');
 
