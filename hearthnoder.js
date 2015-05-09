@@ -19,24 +19,7 @@ var buffer = new Buffer(65535);
 var linkType = c.open(device, filter, bufSize, buffer);
 c.setMinBytes && c.setMinBytes(0);
 
-// load proto definition files
-filelister = require('./filelister');
-var protoFiles = filelister.getAllFilesSync('proto');
-protoFiles = protoFiles.filter(function(i){return path.extname(i)=='.proto'});
-for(i=0;i<protoFiles.length;i++) protoFiles[i] = protoFiles[i].replace('proto/', '');
-var protoRoot = path.join(__dirname, 'proto');
-
-var builder = protobuf.protoFromFile({
-    'file': protoFiles[0],
-    'root': protoRoot
-});
-for(i=1;i<protoFiles.length;i++) {
-    protobuf.protoFromFile({
-        'file': protoFiles[i],
-        'root': protoRoot
-    }, builder);
-}
-var root = builder.build();
+var protoReader = require('./proto/protoLoader');
 
 var blacklist = [
     '12.129.242.24',   // iir.blizzard.com
@@ -119,9 +102,6 @@ c.on('packet', function(nbytes, trunc) {
                     console.log('Detected UDP package ...');
                     ret = decoders.UDP(buffer, ret.offset);
                     console.log(' from port: ' + ret.info.srcport + ' to port: ' + ret.info.dstport);
-                    //var packet_data = buffer.slice(ret.offset, ret.offset + ret.info.length);
-                    //console.log(buffer.toString('binary', ret.offset, ret.offset + ret.info.length));
-                    //examine_packet(packet_data);
                 } 
                 else {
                     console.log('Unsupported IPv4 protocol: ' + PROTOCOL.IP[ret.info.protocol]);
